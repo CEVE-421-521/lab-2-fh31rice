@@ -118,11 +118,11 @@ The **expected annual damage (EAD)** is the probability-weighted average of all 
 $$\text{EAD} = \sum_{i} p_i \times D_i$$
 
 ::: {.callout-tip appearance="simple" icon=false title="Your Response"}
-*Compute the expected annual damage by hand. Show your calculation.*
+  
+EAD = (0.87 × 0) + (0.10 × 10,000) + (0.02 × 50,000) + (0.01 × 90,000)  
+= 2,900 per year
 
-*Replace this text with your work.*
 :::
-
 
 Let's verify with code:
 
@@ -144,9 +144,10 @@ This is **convolution**: we've transformed a hazard distribution (flood probabil
 *What would you tell them? Think about what expected value hides.*
 
 *Replace this text with your answer.*
+Ans: It hides the variability and high/tail risk. EAD is an average over many years. It doesn't mean every year you will have 2,900 dollar of loss. Maybe , one year you have no flood and zero loss, but in a year, you may have event like Harvey and high loss. So EAD actually average outs this. So, I would try to explain this to homeowner.
+Also, 10% probability says, 10 out of 100 year, 2% say 2 out of 100 year etc.
+
 :::
-
-
 ## During Lab
 
 Work through these sections during the lab session.
@@ -181,8 +182,8 @@ surge_dist = GeneralizedExtremeValue(μ, σ, ξ)  # <4>
 Let's visualize this distribution:
 
 ```{julia}
-#| label: fig-gev-pdf
-#| fig-cap: "GEV distribution for annual maximum flood stage."
+#| label: fig-gev-pdf1
+#| fig-cap: "GEV distribution for annual maximum flood stage1."
 let
     x_range = range(0, 15; length=200)  # <1>
     fig = Figure()
@@ -205,8 +206,33 @@ Try changing the GEV parameters below to build intuition.
 Watch how the distribution shape changes.
 
 ```{julia}
-#| label: fig-gev-explore
-#| fig-cap: "Experiment with different GEV parameters to see how they affect the distribution."
+#| label: fig-gev-explore2
+#| fig-cap: "Experiment with different GEV parameters to see how they affect the distribution2."
+let
+    x_range = range(0, 20; length=200)
+    fig = Figure(size=(700, 300))
+
+    # Try changing these values!
+    μ_test = 3.0   # Try: 3.0, 5.0, 7.0
+    σ_test = 1.0   # Try: 1.0, 2.0, 4.0
+    ξ_test = -0.1   # Try: -0.1, 0.0, 0.1, 0.3
+
+    test_dist = GeneralizedExtremeValue(μ_test, σ_test, ξ_test)
+
+    ax = Axis(
+        fig[1, 1];
+        xlabel="Flood Stage (ft)",
+        ylabel="Density",
+        title="GEV(μ=$μ_test, σ=$σ_test, ξ=$ξ_test)"
+    )
+    lines!(ax, x_range, pdf.(test_dist, x_range); linewidth=2)
+    fig
+end
+```
+
+```{julia}
+#| label: fig-gev-explore3
+#| fig-cap: "Experiment with different GEV parameters to see how they affect the distribution3."
 let
     x_range = range(0, 20; length=200)
     fig = Figure(size=(700, 300))
@@ -214,6 +240,31 @@ let
     # Try changing these values!
     μ_test = 5.0   # Try: 3.0, 5.0, 7.0
     σ_test = 2.0   # Try: 1.0, 2.0, 4.0
+    ξ_test = 0.0   # Try: -0.1, 0.0, 0.1, 0.3
+
+    test_dist = GeneralizedExtremeValue(μ_test, σ_test, ξ_test)
+
+    ax = Axis(
+        fig[1, 1];
+        xlabel="Flood Stage (ft)",
+        ylabel="Density",
+        title="GEV(μ=$μ_test, σ=$σ_test, ξ=$ξ_test)"
+    )
+    lines!(ax, x_range, pdf.(test_dist, x_range); linewidth=2)
+    fig
+end
+```
+
+```{julia}
+#| label: fig-gev-explore4
+#| fig-cap: "Experiment with different GEV parameters to see how they affect the distribution4."
+let
+    x_range = range(0, 20; length=200)
+    fig = Figure(size=(700, 300))
+
+    # Try changing these values!
+    μ_test = 7.0   # Try: 3.0, 5.0, 7.0
+    σ_test = 4.0   # Try: 1.0, 2.0, 4.0
     ξ_test = 0.1   # Try: -0.1, 0.0, 0.1, 0.3
 
     test_dist = GeneralizedExtremeValue(μ_test, σ_test, ξ_test)
@@ -229,6 +280,30 @@ let
 end
 ```
 
+```{julia}
+#| label: fig-gev-explore5
+#| fig-cap: "Experiment with different GEV parameters to see how they affect the distribution5."
+let
+    x_range = range(0, 20; length=200)
+    fig = Figure(size=(700, 300))
+
+    # Try changing these values!
+    μ_test = 7.0   # Try: 3.0, 5.0, 7.0
+    σ_test = 4.0   # Try: 1.0, 2.0, 4.0
+    ξ_test = 0.9   # Try: -0.1, 0.0, 0.1, 0.3
+
+    test_dist = GeneralizedExtremeValue(μ_test, σ_test, ξ_test)
+
+    ax = Axis(
+        fig[1, 1];
+        xlabel="Flood Stage (ft)",
+        ylabel="Density",
+        title="GEV(μ=$μ_test, σ=$σ_test, ξ=$ξ_test)"
+    )
+    lines!(ax, x_range, pdf.(test_dist, x_range); linewidth=2)
+    fig
+end
+```
 ::: {.callout-tip appearance="simple" icon=false title="Your Response"}
 *Experiment with the parameters above. What happens when you:*
 
@@ -237,23 +312,29 @@ end
 - *Change ξ from 0.1 to 0.3?*
 
 *Replace this text with your observations.*
+Ans: When I increased the location parameter from 5 to 7, the mean value across x axis shifts to right.
+When I increase the scale parameter from 2 to 4, the distribution spreads out along x axis.
+When I increase shape parammeter from 0.1 to 0.3, the tail becomes more fat.
+
 :::
 
-
 #### Monte Carlo Sampling
-
-We'll draw 10,000 samples from the GEV distribution.
-Each sample represents one possible year's annual maximum flood.
-
+We'll draw 10,000 samples from the GEV distribution.Each sample represents one possible year's annual maximum flood.
 ```{julia}
 #| output: false
 n_samples = 10_000
-hazard_samples = rand(surge_dist, n_samples)  # <1>
+hazard_samples = rand(surge_dist, n_samples)
+# <1> # surge_dist is the already fitted dist, we will randomly take 10,000 samples from here
 ```
+
 1. `rand(distribution, n)` draws n random samples from the distribution
 
 We plot the samples as a **normalized histogram** (probability density) so we can compare it to the true PDF.
+Say, you have 10,000 samples. Now divide it like 0-1 ft, 1-2 ft, 2-3 ft etc and count how many values sit on these range, say there are 2000 values from 0-1 ft. so 2000/10000=0.20 will be probability. Then divide it by bin width so 0.20/1 =0.20 will be the density.
+so, if you do it for all range and find the density and then do all (Densityxwidth), the sum will be 1.
 The area under the histogram equals 1.
+
+The red line is the true pdf, from the real pdf formula say you have many x values(stage) and you have the location,scale and shape aprameters, so then you can determine the red curve values and plot.
 
 ```{julia}
 #| label: fig-mc-samples
@@ -273,7 +354,8 @@ let
     fig
 end
 ```
-1. `normalization=:pdf` scales the histogram so the total area equals 1
+
+1. `normalization=:pdf`(the step I did, divided by total samples, and then deivide by bin width) scales the histogram so the total area equals 1. Normalization means converting counts into probability density by dividing by total samples and bin width so the total area equals 1.
 2. Overlay the true PDF to show our samples match the distribution
 
 #### A Depth-Damage Function
@@ -297,6 +379,7 @@ function logistic_damage(
     return damage_fraction * house_value
 end
 ```
+
 1. Type parameter ensures all inputs have consistent floating-point type
 2. Flood depth = water level minus floor elevation (can't be negative)
 3. No damage below 1 ft of water inside the house (furniture above floor, etc.)
@@ -328,8 +411,9 @@ let
     fig
 end
 ```
+
 1. List comprehension: apply the function to each flood stage
-2. Vertical line showing where the house floor is
+2. Vertical line showing where the house floor is, so here 2 ft is the elevation, so in x axis, if the flood stage increase, the damage will increase in a S curve style, and after 8ft in x axis, the total house got damaged ( 1x10^5 in the x axis). See, before 2 ft in x axis, the damage was zero.
 
 #### Convolution via Monte Carlo
 
@@ -344,9 +428,10 @@ house_value = 100_000.0  # dollars
 damage_samples = [logistic_damage(h, house_elevation, house_value) for h in hazard_samples]  # <1>
 ```
 1. Apply the damage function to each of the 10,000 flood stage samples
+. So from the flood stage historgram, draw 10,000 samples, then for each sample see the corresponding damage from the s shape curve, so now you have 10,000 damage values, then for x axis (Annual damage) divide by 0-10000 dollar, 10000-20000 dollar etc and count how many are there from the 10,000 damage value, say from 0 -10000  there are 2000 random damage, count/10,000 = 2,000/10,000=0.20, then 0.20/bin width 10,000 = density
 
 Again, we plot as a normalized histogram (probability density).
-Notice the spike at \$0 (years with no damage) and the long right tail.
+Notice the spike at \$0 (years with no damage) and the long right tail because there are many samples in 0 damage or in high damage.
 
 ```{julia}
 #| label: fig-damage-dist
@@ -375,9 +460,10 @@ println("Expected Annual Damage (Monte Carlo): \$$(round(ead_mc; digits=2))")
 println("Probability of any damage: $(round(prob_any_damage * 100; digits=1))%")
 println("Probability of damage > \$50k: $(round(prob_severe * 100; digits=1))%")
 ```
+
 1. Mean of samples estimates the expected value
-2. Fraction of samples with positive damage
-3. Fraction of samples exceeding \$50,000
+2. Fraction of samples with positive damage (that means any damage greater than 0)
+3. Fraction of samples exceeding \$50,000 (any damage greater than 50k)
 
 
 ### Structuring Analysis with SimOptDecisions
@@ -427,7 +513,7 @@ let
     fig
 end
 ```
-
+damage ratio = corresponding damage / house original value
 #### Single House Analysis
 
 Let's analyze a house at 4 ft elevation:
@@ -447,7 +533,7 @@ house_damages = [compute_damage(my_house, s) for s in scenarios]  # <2>
 ```
 1. Wrap each water level sample in a `FloodScenario` object
 2. Compute damage for each scenario using our house configuration
-
+###ok, so we will draw random flood stage, if the stage is greater than 4ft(say we drew 5 ft, so 5-4=1ft is the flood depth above first floor height), then we will have damage ratio from the depth-damage function curve for 1 ft in x axis(say that ratio is 0.10, so damage for 1 ft is 0.10x250,000),then for another sample calculate like this etc..if we drew 3.2 which is less than first floor height, then no damage and the ratio is 0. After getting all sum up and divided by total samples to get EAD.
 ```{julia}
 #| label: fig-house-damage
 #| fig-cap: "Distribution of annual damages for a single house at 4 ft elevation."
@@ -532,7 +618,9 @@ end
 ::: {.callout-tip appearance="simple" icon=false title="Your Response"}
 *Why is the relationship between elevation and expected damage nonlinear?
 What causes the steep drop-off as elevation increases?*
+Ans: Damage only occurs, when flood stage is greater than the first floor height, and small flood events are common, rather than the large flood. So if we elevate houses, that means we are safe from small to moderate flood but not rare events. Also, our damage curve is S shaped. These all contributes to no linearity of the EAD in the community.
 
+Why steep drop of EAD as elevation increase? Ans: Because if we increase house elevation a bit from o, we eliminate many small to moderate flood at once and there is a sharp decrease at EAD.
 *Replace this text with your explanation.*
 :::
 
@@ -581,8 +669,10 @@ println("Sum of individual EADs: \$$(round(sum(expected_damages) / 1e6; digits=3
 Would they still be equal if we used different hazard samples for each house?*
 
 *Replace this text with your answer.*
-:::
+Ans: They are equal because the expected damage of the community = sum of expected damage of each house. Some little difference can occur due to monte carlo sample noise.
 
+Different hazard sample will still make them to be equal.
+:::
 
 ### The SimOptDecisions Framework
 
