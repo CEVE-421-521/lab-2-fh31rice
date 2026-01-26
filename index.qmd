@@ -143,7 +143,7 @@ This is **convolution**: we've transformed a hazard distribution (flood probabil
 
 *What would you tell them? Think about what expected value hides.*
 
-*Replace this text with your answer.*
+
 Ans: It hides the variability and high/tail risk. EAD is an average over many years. It doesn't mean every year you will have 2,900 dollar of loss. Maybe , one year you have no flood and zero loss, but in a year, you may have event like Harvey and high loss. So EAD actually average outs this. So, I would try to explain this to homeowner.
 Also, 10% probability says, 10 out of 100 year, 2% say 2 out of 100 year etc.
 
@@ -311,7 +311,7 @@ end
 - *Increase σ from 2 to 4?*
 - *Change ξ from 0.1 to 0.3?*
 
-*Replace this text with your observations.*
+
 Ans: When I increased the location parameter from 5 to 7, the mean value across x axis shifts to right.
 When I increase the scale parameter from 2 to 4, the distribution spreads out along x axis.
 When I increase shape parammeter from 0.1 to 0.3, the tail becomes more fat.
@@ -621,7 +621,7 @@ What causes the steep drop-off as elevation increases?*
 Ans: Damage only occurs, when flood stage is greater than the first floor height, and small flood events are common, rather than the large flood. So if we elevate houses, that means we are safe from small to moderate flood but not rare events. Also, our damage curve is S shaped. These all contributes to no linearity of the EAD in the community.
 
 Why steep drop of EAD as elevation increase? Ans: Because if we increase house elevation a bit from o, we eliminate many small to moderate flood at once and there is a sharp decrease at EAD.
-*Replace this text with your explanation.*
+
 :::
 
 
@@ -668,7 +668,7 @@ println("Sum of individual EADs: \$$(round(sum(expected_damages) / 1e6; digits=3
 *Why are the total community EAD and the sum of individual EADs equal (or nearly equal)?
 Would they still be equal if we used different hazard samples for each house?*
 
-*Replace this text with your answer.*
+
 Ans: They are equal because the expected damage of the community = sum of expected damage of each house. Some little difference can occur due to monte carlo sample noise.
 
 Different hazard sample will still make them to be equal.
@@ -703,22 +703,22 @@ Answer these questions in a few sentences each:
 
 ::: {.callout-tip appearance="simple" icon=false title="Question 1"}
 *How does uncertainty in the hazard distribution propagate to uncertainty in damages through convolution?*
+Ans: Damage doesn't increase in a straight line with the flood height. The uncertainty in flood heights can propagate into damage. It can create many years with no damage and certain years with high damage.
 
-*Replace this text with your answer.*
 :::
 
 ::: {.callout-tip appearance="simple" icon=false title="Question 2"}
 *Why is expected damage NOT equal to damage at the expected flood stage?
 (Hint: think about Jensen's inequality and the shape of the damage function.)*
+Ans: Say we have avergae flood stage at 4 ft, and from the depth damage curve we compute the damage as $2,000. But in general depth is not always 3 ft. Some years it can be less causing no loss, some year it is high stage causing more loss. So, on avergae the high loss can contribute more and it can dominate the loss. That's why the expected damage is not equal damage at the expected flood stage.
 
-*Replace this text with your answer.*
 :::
 
 ::: {.callout-tip appearance="simple" icon=false title="Question 3"}
 *What assumptions did we make that might not hold in reality?
 List at least three and explain why they matter.*
+Ans: (a) Depth damage curve is same for all houses, (b) One stage applied to etire community (c) uncertainty in flood stage (d) all homes face same flood depth, but in reality their land use, elevation, waterbody proximity etc will vary.
 
-*Replace this text with your answer.*
 :::
 
 
